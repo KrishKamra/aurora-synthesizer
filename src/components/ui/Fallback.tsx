@@ -1,4 +1,4 @@
-import { useAuroraStore } from '../../store/auroraStore'
+import { useAuroraStore, useDisplayWeather } from '../../store/auroraStore'
 import { TickNumber } from './TickNumber'
 
 /**
@@ -6,7 +6,7 @@ import { TickNumber } from './TickNumber'
  * Still useful as an instrument: Kp + conditions summary.
  */
 export function Fallback() {
-  const weather = useAuroraStore((s) => s.weather)
+  const weather = useDisplayWeather()
   const lastError = useAuroraStore((s) => s.lastError)
 
   return (

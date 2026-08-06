@@ -84,3 +84,54 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Instrument telemetry range dials */
+.telemetry-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--accent, var(--aurora-green)) 0%,
+    var(--accent, var(--aurora-green)) var(--track-pct, 50%),
+    rgba(234, 242, 242, 0.12) var(--track-pct, 50%),
+    rgba(234, 242, 242, 0.12) 100%
+  );
+  cursor: pointer;
+  outline: none;
+  touch-action: none;
+}
+
+.telemetry-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent, var(--aurora-green));
+  border: 1px solid rgba(5, 6, 8, 0.6);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent, var(--aurora-green)) 50%, transparent);
+  cursor: grab;
+}
+
+.telemetry-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent, var(--aurora-green));
+  border: 1px solid rgba(5, 6, 8, 0.6);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent, var(--aurora-green)) 50%, transparent);
+  cursor: grab;
+}
+
+.telemetry-slider:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+
+.telemetry-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: transparent;
+}

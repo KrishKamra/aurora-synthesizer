@@ -6,11 +6,12 @@ import { useAuroraStore } from '../store/auroraStore'
 const STALE_MS = 3 * 60 * 1000
 
 /**
- * Polls NOAA SWPC and mirrors results into the Zustand store as shader uniforms.
- * staleTime 2–5 min — do not poll faster.
+ * Polls NOAA SWPC into liveWeather.
+ * When fieldSource === 'live', dials (and thus the aurora) track the feed.
+ * Manual scrubbing freezes dials until the user snaps back to live.
  */
 export function useSpaceWeather() {
-  const setWeather = useAuroraStore((s) => s.setWeather)
+  const applyLiveWeather = useAuroraStore((s) => s.applyLiveWeather)
   const setPollingStatus = useAuroraStore((s) => s.setPollingStatus)
   const setLastError = useAuroraStore((s) => s.setLastError)
 
@@ -30,11 +31,11 @@ export function useSpaceWeather() {
 
   useEffect(() => {
     if (query.data) {
-      setWeather(query.data)
+      applyLiveWeather(query.data)
       setPollingStatus('success')
       setLastError(null)
     }
-  }, [query.data, setWeather, setPollingStatus, setLastError])
+  }, [query.data, applyLiveWeather, setPollingStatus, setLastError])
 
   useEffect(() => {
     if (query.isError) {

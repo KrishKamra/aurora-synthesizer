@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { AuroraScene } from './components/scene/AuroraScene'
 import { CalibrationOverlay } from './components/ui/CalibrationOverlay'
@@ -14,18 +14,18 @@ import { isWebGLAvailable } from './utils/webgl'
 
 /**
  * Aurora Synthesizer — single full-bleed WebGL instrument.
- * React only computes uniforms and HUD; the shader owns every aurora pixel.
+ * Field dials (live NOAA or manual scrub) are the only inputs to the aurora shader.
  */
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null)
   const webglFailed = useAuroraStore((s) => s.webglFailed)
   const setWebglFailed = useAuroraStore((s) => s.setWebglFailed)
-  const [audioOn, setAudioOn] = useState(false)
+  const reducedMotion = useAuroraStore((s) => s.reducedMotion)
+  const { audioEnabled, toggleFromGesture } = useAudioDrone()
 
   useReducedMotion()
   useSpaceWeather()
   useInteraction(containerRef)
-  useAudioDrone(audioOn)
 
   useEffect(() => {
     if (!isWebGLAvailable()) {
@@ -53,16 +53,24 @@ export default function App() {
           <CalibrationOverlay />
           <InstrumentHUD />
 
-          {/* Quiet optional audio toggle — restrained, not a game soundtrack */}
-          <button
-            type="button"
-            onClick={() => setAudioOn((v) => !v)}
-            className="absolute bottom-4 right-4 z-20 hidden rounded border border-[var(--panel-border)] bg-[var(--panel-bg)] px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--instrument-white)]/45 backdrop-blur-md hover:text-[var(--instrument-white)]/80 sm:block"
-            aria-pressed={audioOn}
-            aria-label={audioOn ? 'Mute ambient drone' : 'Enable ambient drone'}
-          >
-            {audioOn ? 'audio on' : 'audio'}
-          </button>
+          {/* Audio must start inside this click (user gesture → AudioContext) */}
+          {!reducedMotion && (
+            <button
+              type="button"
+              onClick={() => {
+                void toggleFromGesture()
+              }}
+              className="absolute bottom-4 right-4 z-20 rounded border border-[var(--panel-border)] bg-[var(--panel-bg)] px-2.5 py-1.5 text-[10px] uppercase tracking-[0.18em] text-[var(--instrument-white)]/55 backdrop-blur-md hover:text-[var(--instrument-white)] sm:bottom-4 sm:right-4"
+              aria-pressed={audioEnabled}
+              aria-label={
+                audioEnabled
+                  ? 'Mute ambient field drone'
+                  : 'Enable ambient field drone mapped to Bz and solar wind'
+              }
+            >
+              {audioEnabled ? 'audio on' : 'audio'}
+            </button>
+          )}
         </ErrorBoundary>
       )}
     </div>

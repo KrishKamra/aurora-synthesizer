@@ -67,7 +67,7 @@ export function useInteraction(containerRef: RefObject<HTMLElement | null>) {
       if (!(target instanceof Element)) return false
       return Boolean(
         target.closest(
-          'button, a, input, textarea, select, [role="button"], [data-selectable], [data-testid="mobile-chip"]',
+          'button, a, input, textarea, select, label, [role="button"], [role="slider"], [data-selectable], [data-testid="mobile-chip"]',
         ),
       )
     }

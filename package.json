@@ -6,13 +6,13 @@
   "type": "module",
   "license": "MIT",
   "author": "Krish Kamra <krishkamra@gmail.com>",
-  "homepage": "https://github.com/OWNER/aurora-synthesizer#readme",
+  "homepage": "https://github.com/KrishKamra/aurora-synthesizer#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWNER/aurora-synthesizer.git"
+    "url": "git+https://github.com/KrishKamra/aurora-synthesizer.git"
   },
   "bugs": {
-    "url": "https://github.com/OWNER/aurora-synthesizer/issues"
+    "url": "https://github.com/KrishKamra/aurora-synthesizer/issues"
   },
   "files": [
     "dist",

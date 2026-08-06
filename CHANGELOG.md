@@ -9,7 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial public release scaffolding: docs, license, CI, contribution guides.
+- Interactive telemetry field dials (Kp, Bz, solar wind, density) that drive aurora uniforms.
+- Manual **SCRUB** mode with **snap live** to rejoin NOAA.
+- README screenshots: green (oxygen) and magenta (nitrogen) UI captures under `docs/images/`.
+- Hardened Web Audio drone start-from-user-gesture.
+
+### Fixed
+
+- Infinite re-render from display-weather selector returning a new object each `getSnapshot`.
+- Audio never starting because `AudioContext` was not created inside the click gesture.
 
 ## [0.1.0] — 2026-08-07
 
@@ -25,11 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bloom via pmndrs `postprocessing`.
 - Optional restrained Web Audio drone (Bz pitch, wind amplitude).
 - `prefers-reduced-motion` handling and FPS watchdog with noise-octave fallback.
+- GitHub scaffolding: LICENSE, SECURITY, CONTRIBUTING, CoC, CI, issue/PR templates.
 
 ### Notes
 
 - NOAA legacy `solar-wind/*-1-day.json` paths 404 as of 2026; summary + RTSW endpoints used instead.
 - MVP requires **zero** API keys.
 
-[Unreleased]: https://github.com/OWNER/aurora-synthesizer/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/OWNER/aurora-synthesizer/releases/tag/v0.1.0
+[Unreleased]: https://github.com/KrishKamra/aurora-synthesizer/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/KrishKamra/aurora-synthesizer/releases/tag/v0.1.0

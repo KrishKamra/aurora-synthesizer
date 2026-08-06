@@ -3,18 +3,17 @@ import { useAuroraStore } from '../../store/auroraStore'
 import { TickNumber } from './TickNumber'
 
 /**
- * 1–2 s calibration sequence: numbers count up from 0 to live values
+ * 1–2 s calibration sequence: numbers count up from 0 to field values
  * (instrument powering on).
  */
 export function CalibrationOverlay() {
-  const weather = useAuroraStore((s) => s.weather)
+  const kp = useAuroraStore((s) => s.field.kp)
   const calibrated = useAuroraStore((s) => s.calibrated)
   const setCalibrated = useAuroraStore((s) => s.setCalibrated)
   const [phase, setPhase] = useState<'boot' | 'done'>('boot')
 
   useEffect(() => {
     if (calibrated) return
-    // Wait for first real (or default) data, then finish boot
     const t = window.setTimeout(() => {
       setPhase('done')
       window.setTimeout(() => setCalibrated(true), 400)
@@ -28,7 +27,8 @@ export function CalibrationOverlay() {
     <div
       className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center transition-opacity duration-500"
       style={{
-        background: 'radial-gradient(ellipse at center, rgba(5,6,8,0.55) 0%, rgba(5,6,8,0.92) 70%)',
+        background:
+          'radial-gradient(ellipse at center, rgba(5,6,8,0.55) 0%, rgba(5,6,8,0.92) 70%)',
         opacity: phase === 'done' ? 0 : 1,
       }}
       aria-hidden={phase === 'done'}
@@ -38,7 +38,7 @@ export function CalibrationOverlay() {
           Instrument calibration
         </p>
         <div className="font-mono text-5xl font-semibold tracking-tight text-[var(--aurora-green)] sm:text-6xl">
-          <TickNumber value={weather.kp} decimals={1} durationMs={1400} />
+          <TickNumber value={kp} decimals={1} durationMs={1400} />
         </div>
         <p className="mt-2 font-mono text-xs text-[var(--instrument-white)]/60">
           Kp · powering on

@@ -5,8 +5,6 @@
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-339933?logo=nodedotjs&logoColor=white)](./.nvmrc)
 [![pnpm](https://img.shields.io/badge/package%20manager-pnpm-F69220?logo=pnpm&logoColor=white)](https://pnpm.io)
 
-> After you create the GitHub repo, replace `OWNER` in `package.json`, `CHANGELOG.md`, and `.github/ISSUE_TEMPLATE/config.yml` with your GitHub username or org, then re-enable the CI badge if desired.
-
 > A real-time, playable visualization of Earth’s aurora driven by **live NOAA space weather data**.
 
 This is not decorative space art. It is an **honest instrument**: the field you see is what NOAA satellites measured minutes ago. Dragging or touching the canvas does not invent new data — it **locally perturbs the real underlying flow**, like disturbing a bioluminescent tide pool that is actually there.
@@ -15,12 +13,37 @@ This is not decorative space art. It is an **honest instrument**: the field you 
 
 ---
 
+## Screenshots
+
+Instrument HUD with interactive field dials (Kp, Bz, solar wind, density). Scrubbing any dial drives the aurora uniforms immediately; **snap live** rejoins the NOAA feed.
+
+### Green aurora — oxygen / quieter field
+
+Northward or weakly southward **Bz**, moderate **Kp**. Dominant green ribbons (oxygen emission).
+
+![Green aurora UI — oxygen-dominant ribbons with instrument dials](./docs/images/aurora-green.png)
+
+### Magenta aurora — nitrogen / energized field
+
+Strongly southward **Bz** and elevated **Kp**. Progressive shift toward magenta/red (higher-energy nitrogen).
+
+![Magenta aurora UI — nitrogen-dominant ribbons with instrument dials](./docs/images/aurora-magenta.png)
+
+| Mode | Typical dials | Look |
+|------|----------------|------|
+| **Green** | Bz ≳ 0 nT, moderate Kp | Cool cyan–green curtains |
+| **Magenta** | Bz ≪ 0 nT, high Kp | Violet–magenta storm ribbons |
+
+---
+
 ## Features
 
 - **Custom GLSL aurora** — domain-warped simplex + curl noise; no particle libraries
 - **Live NOAA SWPC data** — Kp, Bz, solar wind speed/density, OVATION (public, keyless)
-- **Interactive field** — pointer/touch local curl with ~1.5s decay; multi-touch ignored
-- **Instrument HUD** — Kp readout, LIVE status, legend, calibration boot sequence
+- **Interactive field dials** — scrub telemetry to reshape color, height, flow, and density in real time
+- **Pointer / touch** — local curl perturbation with ~1.5s decay; multi-touch ignored
+- **Instrument HUD** — Kp readout, LIVE / SCRUB status, legend, calibration boot sequence
+- **Optional audio** — restrained Web Audio drone mapped to Bz (pitch) and wind (level)
 - **Performance budget** — pixel-ratio caps, FPS watchdog, noise-octave degradation
 - **Fallbacks** — WebGL failure → static data instrument; `prefers-reduced-motion` respected
 - **Accessibility** — screen-reader live region, keyboard-focusable panels, focus rings
@@ -92,12 +115,16 @@ src/
   api/           # NOAA fetch + types
   components/
     scene/       # WebGL canvas, aurora plane, stars, bloom
-    ui/          # Instrument HUD, fallback, a11y live region
+    ui/          # Instrument HUD, telemetry dials, fallback, a11y
   hooks/         # Weather polling, interaction, reduced-motion, audio
   shaders/       # Custom GLSL (source of visual truth)
-  store/         # Zustand global state
+  store/         # Zustand global state (live feed + field dials)
   utils/         # Colors, WebGL detection
-docs/            # Architecture, data, deployment
+docs/
+  images/        # README screenshots
+  ARCHITECTURE.md
+  DATA.md
+  DEPLOYMENT.md
 ```
 
 ---

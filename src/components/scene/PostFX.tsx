@@ -8,7 +8,7 @@ import { useAuroraStore } from '../../store/auroraStore'
  */
 export function PostFX() {
   const fpsDegraded = useAuroraStore((s) => s.fpsDegraded)
-  const kp = useAuroraStore((s) => s.weather.kp)
+  const kp = useAuroraStore((s) => s.field.kp)
 
   const strength = fpsDegraded ? 0.55 : 0.9 + (kp / 9) * 0.2
   // 0.65–0.75 range from brief — stars peak ~0.45 so they stay crisp

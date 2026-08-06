@@ -10,6 +10,7 @@ type AuroraUniforms = {
   uKp: { value: number }
   uBz: { value: number }
   uSolarWindSpeed: { value: number }
+  uDensity: { value: number }
   uAspect: { value: number }
   uReducedMotion: { value: number }
   uNoiseOctaves: { value: number }
@@ -22,23 +23,20 @@ type AuroraUniforms = {
 
 /**
  * Full-screen aurora ribbon plane.
- * Shader is the single source of visual truth — React only computes uniforms.
+ * Shader is the single source of visual truth — React only passes field uniforms.
  */
 export function AuroraPlane() {
   const matRef = useRef<THREE.ShaderMaterial>(null)
   const { viewport } = useThree()
 
-  const weather = useAuroraStore((s) => s.weather)
-  const interaction = useAuroraStore((s) => s.interaction)
-  const reducedMotion = useAuroraStore((s) => s.reducedMotion)
-  const fpsDegraded = useAuroraStore((s) => s.fpsDegraded)
-
-  const uniforms = useMemo<AuroraUniforms>(
-    () => ({
+  const uniforms = useMemo<AuroraUniforms>(() => {
+    const f = useAuroraStore.getState().field
+    return {
       uTime: { value: 0 },
-      uKp: { value: weather.kp },
-      uBz: { value: weather.bz },
-      uSolarWindSpeed: { value: weather.solarWindSpeed },
+      uKp: { value: f.kp },
+      uBz: { value: f.bz },
+      uSolarWindSpeed: { value: f.solarWindSpeed },
+      uDensity: { value: f.solarWindDensity },
       uAspect: { value: 1 },
       uReducedMotion: { value: 0 },
       uNoiseOctaves: { value: 4 },
@@ -49,23 +47,22 @@ export function AuroraPlane() {
         value: new THREE.Color(...readCssColor('--aurora-magenta', PALETTE.magenta)),
       },
       uColorVoid: { value: new THREE.Color(...readCssColor('--void', PALETTE.void)) },
-    }),
-    // Colors + initial weather snapshotted once; live values updated in useFrame
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+    }
+  }, [])
 
+  // Read store every frame so sliders update the aurora without React re-render lag
   useFrame(({ clock }) => {
     const m = matRef.current
     if (!m) return
+    const { field, interaction, reducedMotion, fpsDegraded } = useAuroraStore.getState()
     const u = m.uniforms as unknown as AuroraUniforms
     u.uTime.value = clock.elapsedTime
-    u.uKp.value = weather.kp
-    u.uBz.value = weather.bz
-    u.uSolarWindSpeed.value = weather.solarWindSpeed
+    u.uKp.value = field.kp
+    u.uBz.value = field.bz
+    u.uSolarWindSpeed.value = field.solarWindSpeed
+    u.uDensity.value = field.solarWindDensity
     u.uAspect.value = viewport.aspect
     u.uReducedMotion.value = reducedMotion ? 1 : 0
-    // Prefer lower noise octaves over dropped frames
     u.uNoiseOctaves.value = fpsDegraded ? 2 : 4
     u.uPointer.value.set(interaction.x, interaction.y)
     u.uPointerStrength.value = interaction.strength

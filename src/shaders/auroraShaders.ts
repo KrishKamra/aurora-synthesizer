@@ -18,11 +18,12 @@ precision highp float;
 
 varying vec2 vUv;
 
-// --- Live NOAA-driven uniforms ---
+// --- Field uniforms (NOAA live or manual dials) ---
 uniform float uTime;
 uniform float uKp;
 uniform float uBz;
 uniform float uSolarWindSpeed;
+uniform float uDensity;
 uniform float uAspect;
 uniform float uReducedMotion;
 uniform float uNoiseOctaves; // 1–4 performance dial
@@ -131,21 +132,31 @@ void main() {
   vec2 uv = vUv;
   vec2 p = (uv - 0.5) * vec2(uAspect, 1.0) + 0.5;
 
-  // ── Data-driven parameters (brief starting values) ──
+  // ── Field-driven parameters (sliders / NOAA → uniforms) ──
   float noiseScale = 0.85;
   float domainWarpStrength = 0.42;
   float timeScale = 0.08;
 
   float kpNorm = clamp(uKp / 9.0, 0.0, 1.0);
-  float ribbonHeight = mix(0.22, 0.58, kpNorm);
-  float latitudePush = mix(0.0, 0.28, kpNorm);
+  // Kp: taller, denser ribbons as activity rises
+  float ribbonHeight = mix(0.16, 0.62, kpNorm);
+  float latitudePush = mix(0.0, 0.34, kpNorm);
 
-  float bzEnergy = clamp((-uBz) / 15.0, 0.0, 1.0);
-  float energyMix = mix(0.12, 1.0, bzEnergy) * (0.4 + 0.6 * kpNorm);
+  // Bz: southward (negative) clearly shifts green → magenta
+  // Map -20…+10 nT into a strong energy axis so dials read immediately
+  float bzEnergy = clamp((-uBz + 2.0) / 18.0, 0.0, 1.0);
+  float energyMix = mix(0.05, 1.0, pow(bzEnergy, 0.85));
+  // Quiet Kp can still go magenta when Bz is strongly south
+  energyMix = mix(energyMix * 0.55, energyMix, 0.35 + 0.65 * kpNorm);
 
-  float windFactor = clamp((uSolarWindSpeed - 300.0) / 500.0, 0.0, 1.5);
-  float flowSpeed = timeScale * (0.7 + windFactor * 1.4);
+  // Wind: flow speed + domain warp (faster wind = more chaotic curtains)
+  float windFactor = clamp((uSolarWindSpeed - 250.0) / 550.0, 0.0, 1.4);
+  float flowSpeed = timeScale * (0.45 + windFactor * 2.1);
   flowSpeed *= mix(1.0, 0.12, uReducedMotion);
+  domainWarpStrength *= mix(0.75, 1.45, windFactor);
+
+  // Density: band fill / brightness (plasma load)
+  float densityNorm = clamp((uDensity - 1.0) / 20.0, 0.0, 1.2);
 
   float t = uTime * flowSpeed;
 
@@ -207,18 +218,20 @@ void main() {
   // Bioluminescent interaction pulse
   field += falloff * 0.55 * envelope;
 
-  // Quiet Kp still reads as living aurora (honest, not storm-fake)
-  float intensity = field * mix(1.05, 1.75, kpNorm);
+  // Quiet Kp still reads as living aurora; density thickens the glow
+  float intensity = field * mix(0.95, 1.9, kpNorm) * mix(0.85, 1.45, densityNorm);
   intensity = max(intensity, 0.0);
 
-  // Color: altitude + energy (oxygen green → nitrogen magenta)
+  // Color: altitude + Bz energy (oxygen green → nitrogen magenta)
   float altitude = clamp((p.y - (bandCenter - halfH)) / max(ribbonHeight, 0.01), 0.0, 1.0);
-  float greenWeight = 1.0 - energyMix * 0.7 * (0.35 + 0.65 * altitude);
-  float magentaWeight = energyMix * (0.3 + 0.7 * altitude);
-  magentaWeight += bzEnergy * 0.22 * smoothstep(0.15, 0.75, intensity);
+  float greenWeight = 1.0 - energyMix * (0.55 + 0.4 * altitude);
+  float magentaWeight = energyMix * (0.45 + 0.55 * altitude);
+  // Strong southward Bz: almost pure magenta cores
+  magentaWeight = max(magentaWeight, energyMix * 0.85);
+  greenWeight = max(0.0, 1.0 - magentaWeight * 0.95);
 
   vec3 auroraCol = uColorGreen * greenWeight + uColorMagenta * magentaWeight;
-  auroraCol = mix(auroraCol, vec3(0.78, 0.98, 0.9), smoothstep(0.65, 1.3, intensity) * 0.28);
+  auroraCol = mix(auroraCol, vec3(0.78, 0.98, 0.9), smoothstep(0.65, 1.3, intensity) * 0.22 * (1.0 - energyMix));
 
   // Transparent gaps so stars behind remain visible — never a flat gradient plane
   float cover = smoothstep(0.03, 0.42, intensity);

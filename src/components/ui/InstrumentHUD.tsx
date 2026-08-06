@@ -23,11 +23,11 @@ export function InstrumentHUD() {
         </div>
         <div
           id="instrument-panel-desktop"
-          className="pointer-events-auto absolute bottom-5 left-4 rounded-lg border border-[var(--panel-border)] bg-[var(--panel-bg)] p-4 backdrop-blur-md md:bottom-8 md:left-6 md:p-5"
+          className="pointer-events-auto absolute bottom-5 left-4 w-[min(20rem,calc(100vw-2rem))] rounded-lg border border-[var(--panel-border)] bg-[var(--panel-bg)] p-4 backdrop-blur-md md:bottom-8 md:left-6 md:p-5"
         >
           <KpReadout />
           <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-[var(--instrument-white)]/35">
-            trace the current
+            scrub the field · trace the current
           </p>
         </div>
       </div>
