@@ -1,0 +1,75 @@
+{
+  "name": "aurora-synthesizer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Real-time aurora visualization driven by live NOAA space weather data — an honest WebGL instrument, not decorative space art.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Krish Kamra <krishkamra@gmail.com>",
+  "homepage": "https://github.com/OWNER/aurora-synthesizer#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OWNER/aurora-synthesizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OWNER/aurora-synthesizer/issues"
+  },
+  "files": [
+    "dist",
+    "docs",
+    "public",
+    "src",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "keywords": [
+    "aurora",
+    "space-weather",
+    "noaa",
+    "webgl",
+    "threejs",
+    "react-three-fiber",
+    "glsl",
+    "visualization",
+    "kp-index",
+    "vite",
+    "react"
+  ],
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint src",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "@react-three/postprocessing": "^3.0.4",
+    "@tanstack/react-query": "^5.101.4",
+    "postprocessing": "^6.39.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "three": "^0.185.1",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.185.4",
+    "@vitejs/plugin-react": "^6.0.4",
+    "oxlint": "^1.75.0",
+    "playwright": "^1.62.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0"
+  }
+}

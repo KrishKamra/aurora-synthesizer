@@ -1,0 +1,86 @@
+@import 'tailwindcss';
+
+/* Single source of truth — shared with shader uniforms via getComputedStyle */
+:root {
+  --void: #050608;
+  --aurora-green: #4cffb3;
+  --aurora-magenta: #c64cff;
+  --instrument-white: #eaf2f2;
+  --amber: #ffb454;
+  --panel-bg: rgba(5, 6, 8, 0.72);
+  --panel-border: rgba(234, 242, 242, 0.12);
+  --focus-ring: #4cffb3;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--void);
+  color: var(--instrument-white);
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent pull-to-refresh / overscroll on the instrument */
+body {
+  overscroll-behavior: none;
+  touch-action: none;
+  user-select: none;
+}
+
+/* Allow text selection only inside instrument panels */
+[data-selectable],
+[data-selectable] * {
+  user-select: text;
+  touch-action: manipulation;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Visible focus rings — a11y requirement */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Screen-reader only live region */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

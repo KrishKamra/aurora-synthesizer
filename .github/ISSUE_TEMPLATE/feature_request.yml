@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest an improvement that fits the instrument thesis
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Prefer ideas that strengthen honest data, performance, accessibility, or the instrument metaphor — not pure spectacle.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / opportunity
+      description: What user need or gap does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How should it work?
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Design constraint impact
+      description: Does this affect the shader-as-truth rule, NOAA polling, secrets, a11y, or performance budget?
+      placeholder: e.g. No new secrets; still 3-minute poll; canvas remains full-bleed.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

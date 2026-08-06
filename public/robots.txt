@@ -1,0 +1,6 @@
+# Static SPA — allow indexing of the instrument page
+User-agent: *
+Allow: /
+
+# Prefer not to index hashed build assets if crawled separately
+Disallow: /assets/

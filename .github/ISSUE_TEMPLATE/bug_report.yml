@@ -1,0 +1,64 @@
+name: Bug report
+description: Something is broken or incorrect
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill out as much as you can.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened? What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open …
+        2. Drag …
+        3. See …
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: "Browser, OS, device (e.g. Chrome 131 / Windows 11 / desktop)"
+    validations:
+      required: true
+  - type: dropdown
+    id: webgl
+    attributes:
+      label: Did the WebGL visualization load?
+      options:
+        - "Yes — aurora canvas visible"
+        - "No — static fallback / blank"
+        - "Not sure"
+    validations:
+      required: true
+  - type: dropdown
+    id: noaa
+    attributes:
+      label: Did NOAA requests succeed? (Network tab)
+      options:
+        - "Yes"
+        - "Some failed"
+        - "All failed"
+        - "Did not check"
+    validations:
+      required: true
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: Paste relevant errors (redact any secrets — there should be none).
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Screenshots, deploy URL, commit SHA, etc.

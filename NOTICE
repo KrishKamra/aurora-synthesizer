@@ -1,0 +1,38 @@
+Aurora Synthesizer
+Copyright (c) 2026 Krish Kamra
+
+This product includes software developed as an independent open-source project
+and is not affiliated with, endorsed by, or sponsored by the National Oceanic
+and Atmospheric Administration (NOAA) or the National Weather Service (NWS).
+
+---------------------------------------------------------------------------
+Third-party data
+
+Space weather observations and forecast products are obtained from NOAA /
+NWS Space Weather Prediction Center (SWPC) public data services:
+
+  https://www.swpc.noaa.gov/
+  https://services.swpc.noaa.gov/
+
+Users should consult NOAA/SWPC for official forecasts and warnings.
+
+---------------------------------------------------------------------------
+Third-party software
+
+This project depends on open-source packages listed in package.json and
+pnpm-lock.yaml (MIT, Apache-2.0, and other licenses as declared by each
+package). Notable runtime dependencies include:
+
+  - React (MIT)
+  - Three.js (MIT)
+  - @react-three/fiber, @react-three/drei, @react-three/postprocessing (MIT)
+  - postprocessing (MIT / zlib-style as declared upstream)
+  - Zustand (MIT)
+  - TanStack Query (MIT)
+  - Vite, Tailwind CSS (MIT)
+
+GLSL simplex noise routines used in the aurora shader are based on well-known
+public-domain / permissive implementations associated with Ashima Arts and
+Ian McEwan (commonly redistributed with credit).
+
+See each package’s LICENSE file under node_modules for full terms.
